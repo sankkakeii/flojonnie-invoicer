@@ -3,7 +3,7 @@ import LoadingSpinner from '@/components/Loader';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { auth } from '@/config/firebase';
-import { getSettings, updateSettings } from './getSettings';
+import { getSettings, updateSettings } from '../../config/getSettings';
 
 const Settings = () => {
     const [address, setAddress] = useState('');
