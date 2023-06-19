@@ -1,9 +1,9 @@
-import { useRequireAuth } from '../../config/useRequireAuth';
+import { useRequireAuth } from '@/config/useRequireAuth';
 import LoadingSpinner from '@/components/Loader';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { auth } from '@/config/firebase';
-import { getSettings, updateSettings } from '../../config/getSettings';
+import { getSettings, updateSettings } from '@/config/getSettings';
 
 const Settings = () => {
     const [address, setAddress] = useState('');
