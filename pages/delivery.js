@@ -4,6 +4,7 @@ import pdfFonts from "pdfmake/build/vfs_fonts";
 import Navbar from '@/components/Navbar';
 import { useRequireAuth } from '../config/useRequireAuth';
 import LoadingSpinner from '@/components/Loader';
+import { auth, db } from '@/config/firebase';
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
@@ -215,6 +216,38 @@ export default function DeliveryForm() {
                         margin: [0, 10, 0, 5]
                     }
                 }
+            }
+
+
+            const deliveryData = {
+                to,
+                address,
+                telephone,
+                dateSent,
+                ourContactPerson,
+                attention,
+                orderNumber,
+                invoiceNumber,
+                description,
+                quantityDelivered,
+                officerName,
+                officerSignature,
+                officerDate,
+                clientName,
+                clientSignature,
+                clientDate,
+                clientName2,
+                clientSignature2,
+                clientDate2
+            };
+        
+            // add to firestore
+            const user = auth.currentUser;
+            if (user) {
+                const deliveriesRef = db.collection('deliveries').doc();
+                await deliveriesRef.set(deliveryData, { merge:false });
+            } else {
+                alert("No user is currently logged in");
             }
     
 
