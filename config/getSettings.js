@@ -1,4 +1,4 @@
-import { auth, db } from './firebase';
+import { auth, db } from '@/config/firebase';
 
 export const getSettings = async () => {
     const user = auth.currentUser;
