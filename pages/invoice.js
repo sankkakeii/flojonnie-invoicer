@@ -5,6 +5,7 @@ import Navbar from '@/components/Navbar';
 import { useRequireAuth } from '../config/useRequireAuth';
 import LoadingSpinner from '@/components/Loader';
 import { useFirestoreUser } from '../config/firestoreUserContext';
+import { auth, db } from '@/config/firebase';
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
@@ -84,7 +85,7 @@ const InvoiceGenerator = () => {
         const reader = new FileReader();
         reader.readAsDataURL(imageData);
 
-        reader.onloadend = () => {
+        reader.onloadend = async () => {
             const vat = calculateVAT(invoiceItems);
             const total = calculateTotal(invoiceItems);
 
@@ -160,6 +161,37 @@ const InvoiceGenerator = () => {
                     },
                 ],
             };
+
+            const invoiceData = {
+                firestoreUser: {
+                    address: firestoreUser?.address,
+                    email: firestoreUser?.email,
+                    phone1: firestoreUser?.phone1,
+                    phone2: firestoreUser?.phone2,
+                    bankName: firestoreUser?.bankName,
+                    accountNumber: firestoreUser?.accountNumber,
+                    hrmName: firestoreUser?.hrmName,
+                },
+                projectTitle,
+                projectDescription,
+                poNumber,
+                invoice,
+                date,
+                address,
+                invoiceItems,
+                vat: vat.toFixed(2),
+                total: total.toFixed(2),
+            };
+    
+            // Add to firestore
+            const user = auth.currentUser;
+            if (user) {
+                const invoiceRef = db.collection('invoice').doc();
+                await invoiceRef.set(invoiceData, { merge: false });
+            } else {
+                alert("No user is currently logged in");
+            }
+            
             pdfMake.createPdf(data).download();
         };
     };
