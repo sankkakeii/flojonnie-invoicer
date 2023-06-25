@@ -1,11 +1,14 @@
-import { useRequireAuth } from '@/config/useRequireAuth';
+import { useRequireAuth } from '../../config/useRequireAuth';
 import LoadingSpinner from '@/components/Loader';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { auth } from '@/config/firebase';
-import { getSettings, updateSettings } from '@/config/getSettings';
+import { getSettings, updateSettings } from './getSettings';
 
 const Settings = () => {
+    const auth = useRequireAuth();
+    const router = useRouter();
+
     const [address, setAddress] = useState('');
     const [phone1, setPhone1] = useState('');
     const [phone2, setPhone2] = useState('');
@@ -15,8 +18,7 @@ const Settings = () => {
     const [bankName, setBankName] = useState('');
     const [hrmName, setHrmName] = useState('');
 
-    const router = useRouter();
-    const loading = useRequireAuth();
+    const loading = auth.user === null;
 
     if (loading) {
         return <LoadingSpinner/>;
@@ -127,4 +129,3 @@ const Settings = () => {
 };
 
 export default Settings;
-
