@@ -353,20 +353,7 @@ const ProformaInvoiceGenerator = () => {
         </button>
       </div>
 
-      {showPreview && (
-        <div className="mt-8">
-          {/* Replace with a component to preview the invoice */}
-        </div>
-      )}
-
       <div className="flex justify-between mt-8">
-        <button
-          className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-md mr-5"
-          onClick={togglePreview}
-        >
-          {showPreview ? 'Hide Preview' : 'Show Preview'}
-        </button>
-
         <button
           className="bg-indigo-500 hover:bg-indigo-600 text-white font-semibold py-2 px-4 rounded-md"
           onClick={generatePDF}
