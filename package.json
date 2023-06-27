@@ -16,6 +16,7 @@
     "jspdf": "^2.5.1",
     "jspdf-autotable": "^3.5.29",
     "next": "13.4.4",
+    "notiflix": "^3.2.6",
     "pdfmake": "^0.2.7",
     "postcss": "8.4.24",
     "react": "18.2.0",
