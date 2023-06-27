@@ -6,6 +6,8 @@ import { useRequireAuth } from '../config/useRequireAuth';
 import LoadingSpinner from '@/components/Loader';
 import { auth, db } from '@/config/firebase';
 import { useFirestoreUser } from '../config/firestoreUserContext';
+import { useRouter } from 'next/router';
+import Notiflix from 'notiflix';
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
@@ -58,6 +60,7 @@ const ProformaInvoiceGenerator = () => {
     const [showPreview, setShowPreview] = useState(false);
     const firestoreUser = useFirestoreUser();
     const loading = useRequireAuth();
+    const router = useRouter();
 
     if (loading) {
       return <LoadingSpinner/>;
@@ -79,6 +82,7 @@ const ProformaInvoiceGenerator = () => {
     };
 
     const generatePDF = async () => {
+      Notiflix.Loading.pulse('Generating Invoice...');
       const imageResponse = await fetch('/logo.png');
       const imageData = await imageResponse.blob();
       const reader = new FileReader();
@@ -207,11 +211,17 @@ const ProformaInvoiceGenerator = () => {
 
       
         pdfMake.createPdf(data).download();
+        Notiflix.Loading.remove(); // remove the loading animation
+        Notiflix.Notify.success('PDF generated and downloaded');
       };
       reader.onerror = function (error) {
         console.log('Error: ', error);
       };
     };
+
+    const goBack = () => {
+      router.back();
+  };
     
 
 
@@ -354,6 +364,8 @@ const ProformaInvoiceGenerator = () => {
       </div>
 
       <div className="flex justify-between mt-8">
+      <button onClick={goBack} className="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 mr-5 rounded-md">Go Back</button>
+
         <button
           className="bg-indigo-500 hover:bg-indigo-600 text-white font-semibold py-2 px-4 rounded-md"
           onClick={generatePDF}

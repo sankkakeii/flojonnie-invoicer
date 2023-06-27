@@ -5,6 +5,8 @@ import Navbar from '@/components/Navbar';
 import { useRequireAuth } from '../config/useRequireAuth';
 import LoadingSpinner from '@/components/Loader';
 import { auth, db } from '@/config/firebase';
+import { useRouter } from 'next/router';
+import Notiflix from 'notiflix';
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
@@ -29,6 +31,7 @@ export default function DeliveryForm() {
     const [clientSignature2, setClientSignature2] = useState('');
     const [clientDate2, setClientDate2] = useState('');
     const loading = useRequireAuth();
+    const router = useRouter();
 
     if (loading) {
         return <LoadingSpinner/>;
@@ -36,7 +39,7 @@ export default function DeliveryForm() {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-
+        Notiflix.Notify.success('Item added successfully');
         const imageResponse = await fetch('/logo.png');
         const imageData = await imageResponse.blob();
         const reader = new FileReader();
@@ -250,11 +253,17 @@ export default function DeliveryForm() {
                 alert("No user is currently logged in");
             }
     
-
             pdfMake.createPdf(docDefinition).download();
+            Notiflix.Loading.remove(); // remove the loading animation
+            Notiflix.Notify.success('PDF generated and downloaded');
         };
 
         reader.readAsDataURL(imageData);
+    };
+
+
+    const goBack = () => {
+        router.back();
     };
 
 
